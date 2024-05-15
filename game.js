@@ -1,7 +1,7 @@
-
 // game.js
 let gold = 0;
 let tapDamage = 1;
+let warriorDamage = 0;
 let monsterHealth = 100;
 let monsterMaxHealth = 100;
 const monsterHealthIncreaseFactor = 1.2; // Increase monster health by 20% after each defeat
@@ -38,9 +38,17 @@ function showTapDamage(damage) {
     setTimeout(() => tapDamageText.style.display = 'none', 500);
 }
 
+function showWarriorDamage(damage) {
+    const warriorDamageText = document.getElementById('warrior-damage-text');
+    warriorDamageText.textContent = `-${damage}`;
+    warriorDamageText.style.display = 'block';
+    setTimeout(() => warriorDamageText.style.display = 'none', 500);
+}
+
 function updateUI() {
     document.getElementById('gold').textContent = gold;
     document.getElementById('tap-damage').textContent = tapDamage;
+    document.getElementById('warrior-damage').textContent = warriorDamage;
     const healthBarInner = document.getElementById('health-bar-inner');
     healthBarInner.style.width = `${(monsterHealth / monsterMaxHealth) * 100}%`;
 
@@ -64,6 +72,7 @@ function hireWarrior(index) {
         warrior.count++;
         warrior.damage += warrior.baseDamage;
         tapDamage += warrior.baseDamage;
+        warriorDamage += warrior.baseDamage;
         warrior.cost = Math.floor(warrior.cost * 1.15); // Increase cost by 15% for next purchase
         saveGame();
         updateUI();
@@ -79,6 +88,9 @@ function autoBattle() {
         monsterMaxHealth = Math.floor(monsterMaxHealth * monsterHealthIncreaseFactor);
         monsterHealth = monsterMaxHealth;
     }
+    if (totalDamage > 0) {
+        showWarriorDamage(totalDamage);
+    }
     saveGame();
     updateUI();
 }
@@ -88,6 +100,7 @@ function saveGame() {
     const gameState = {
         gold: gold,
         tapDamage: tapDamage,
+        warriorDamage: warriorDamage,
         monsterHealth: monsterHealth,
         monsterMaxHealth: monsterMaxHealth,
         warriors: warriors,
@@ -102,6 +115,7 @@ function loadGame() {
         const gameState = JSON.parse(savedGameState);
         gold = gameState.gold;
         tapDamage = gameState.tapDamage;
+        warriorDamage = gameState.warriorDamage;
         monsterHealth = gameState.monsterHealth;
         monsterMaxHealth = gameState.monsterMaxHealth;
         for (let i = 0; i < warriors.length; i++) {
@@ -131,3 +145,4 @@ window.onload = function() {
     updateUI();
     disablePinchToZoom();
 };
+
