@@ -94,4 +94,29 @@ function saveGame() {
     localStorage.setItem('idleMonsterClickerGameState', JSON.stringify(gameState));
 }
 
-// Load game state
+// Load game state from localStorage
+function loadGame() {
+    const savedGameState = localStorage.getItem('idleMonsterClickerGameState');
+    if (savedGameState) {
+        const gameState = JSON.parse(savedGameState);
+        gold = gameState.gold;
+        tapDamage = gameState.tapDamage;
+        monsterHealth = gameState.monsterHealth;
+        monsterMaxHealth = gameState.monsterMaxHealth;
+        for (let i = 0; i < warriors.length; i++) {
+            warriors[i].cost = gameState.warriors[i].cost;
+            warriors[i].baseDamage = gameState.warriors[i].baseDamage;
+            warriors[i].damage = gameState.warriors[i].damage;
+            warriors[i].count = gameState.warriors[i].count;
+        }
+    }
+}
+
+// Call autoBattle every second
+setInterval(autoBattle, 1000);
+
+// Load the game state when the page loads
+window.onload = function() {
+    loadGame();
+    updateUI();
+};
