@@ -20,6 +20,7 @@ body {
 
 .monster {
     position: relative;
+    margin-top: 50px;
 }
 
 #monster {
@@ -34,18 +35,19 @@ body {
 
 #tap-damage-text {
     position: absolute;
-    top: 10px;
+    top: -30px; /* Position the text above the monster */
     left: 50%;
     transform: translateX(-50%);
     font-size: 24px;
     color: #ff5252;
     display: none;
     animation: fadeOut 0.5s forwards;
+    pointer-events: none; /* Prevent the text from blocking clicks */
 }
 
 @keyframes fadeOut {
     0% { opacity: 1; }
-    100% { opacity: 0; }
+    100% { opacity: 0; top: -60px; } /* Animate the text moving up */
 }
 
 .health-bar {
