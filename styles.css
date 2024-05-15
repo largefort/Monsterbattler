@@ -33,16 +33,25 @@ body {
     transform: scale(0.95);
 }
 
-#tap-damage-text {
+#tap-damage-text,
+#warrior-damage-text {
     position: absolute;
-    top: -30px; /* Position the text above the monster */
     left: 50%;
     transform: translateX(-50%);
     font-size: 24px;
     color: #ff5252;
     display: none;
-    animation: fadeOut 0.5s forwards;
     pointer-events: none; /* Prevent the text from blocking clicks */
+}
+
+#tap-damage-text {
+    top: -30px; /* Position the text above the monster */
+    animation: fadeOut 0.5s forwards;
+}
+
+#warrior-damage-text {
+    top: 50%; /* Position the text in the middle of the monster */
+    animation: fadeOut 0.5s forwards;
 }
 
 @keyframes fadeOut {
@@ -106,3 +115,4 @@ body {
     background-color: #aaa;
     cursor: not-allowed;
 }
+
