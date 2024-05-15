@@ -1,4 +1,25 @@
 // game.js
+
+// Helper function to format numbers into short versions
+function formatNumber(num) {
+    if (num >= 1e15) {
+        return (num / 1e15).toFixed(1) + 'Qa'; // Quadrillion
+    }
+    if (num >= 1e12) {
+        return (num / 1e12).toFixed(1) + 'T'; // Trillion
+    }
+    if (num >= 1e9) {
+        return (num / 1e9).toFixed(1) + 'B'; // Billion
+    }
+    if (num >= 1e6) {
+        return (num / 1e6).toFixed(1) + 'M'; // Million
+    }
+    if (num >= 1e3) {
+        return (num / 1e3).toFixed(1) + 'K'; // Thousand
+    }
+    return num;
+}
+
 let gold = 0;
 let tapDamage = 1;
 let warriorDamage = 0;
@@ -33,30 +54,30 @@ document.getElementById('monster').addEventListener('click', () => {
 
 function showTapDamage(damage) {
     const tapDamageText = document.getElementById('tap-damage-text');
-    tapDamageText.textContent = `-${damage}`;
+    tapDamageText.textContent = `-${formatNumber(damage)}`;
     tapDamageText.style.display = 'block';
     setTimeout(() => tapDamageText.style.display = 'none', 500);
 }
 
 function showWarriorDamage(damage) {
     const warriorDamageText = document.getElementById('warrior-damage-text');
-    warriorDamageText.textContent = `-${damage}`;
+    warriorDamageText.textContent = `-${formatNumber(damage)}`;
     warriorDamageText.style.display = 'block';
     setTimeout(() => warriorDamageText.style.display = 'none', 500);
 }
 
 function updateUI() {
-    document.getElementById('gold').textContent = gold;
-    document.getElementById('tap-damage').textContent = tapDamage;
-    document.getElementById('warrior-damage').textContent = warriorDamage;
+    document.getElementById('gold').textContent = formatNumber(gold);
+    document.getElementById('tap-damage').textContent = formatNumber(tapDamage);
+    document.getElementById('warrior-damage').textContent = formatNumber(warriorDamage);
     const healthBarInner = document.getElementById('health-bar-inner');
     healthBarInner.style.width = `${(monsterHealth / monsterMaxHealth) * 100}%`;
 
-    document.getElementById('monster-health').textContent = `${monsterHealth} / ${monsterMaxHealth}`;
+    document.getElementById('monster-health').textContent = `${formatNumber(monsterHealth)} / ${formatNumber(monsterMaxHealth)}`;
 
     for (let i = 0; i < warriors.length; i++) {
         const warriorButton = document.getElementById(`hire-warrior-${i + 1}`);
-        warriorButton.textContent = `Hire Warrior ${i + 1} (${warriors[i].cost} Gold) - ${warriors[i].count} Hired`;
+        warriorButton.textContent = `Hire Warrior ${i + 1} (${formatNumber(warriors[i].cost)} Gold) - ${warriors[i].count} Hired`;
         warriorButton.disabled = gold < warriors[i].cost;
     }
 }
@@ -145,4 +166,3 @@ window.onload = function() {
     updateUI();
     disablePinchToZoom();
 };
-
