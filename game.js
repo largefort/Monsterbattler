@@ -2,7 +2,8 @@
 let gold = 0;
 let tapDamage = 1;
 let monsterHealth = 100;
-const monsterMaxHealth = 100;
+let monsterMaxHealth = 100;
+const monsterHealthIncreaseFactor = 1.2; // Increase monster health by 20% after each defeat
 const warriors = [
     { cost: 0, baseDamage: 5, damage: 5, count: 0 },
     { cost: 50, baseDamage: 10, damage: 10, count: 0 },
@@ -21,6 +22,7 @@ document.getElementById('monster').addEventListener('click', () => {
 
     if (monsterHealth <= 0) {
         gold += 10;
+        monsterMaxHealth = Math.floor(monsterMaxHealth * monsterHealthIncreaseFactor);
         monsterHealth = monsterMaxHealth;
     }
 
@@ -40,6 +42,8 @@ function updateUI() {
     document.getElementById('tap-damage').textContent = tapDamage;
     const healthBarInner = document.getElementById('health-bar-inner');
     healthBarInner.style.width = `${(monsterHealth / monsterMaxHealth) * 100}%`;
+
+    document.getElementById('monster-health').textContent = `${monsterHealth} / ${monsterMaxHealth}`;
 
     for (let i = 0; i < warriors.length; i++) {
         const warriorButton = document.getElementById(`hire-warrior-${i + 1}`);
@@ -71,6 +75,7 @@ function autoBattle() {
     monsterHealth -= totalDamage;
     if (monsterHealth <= 0) {
         gold += 10;
+        monsterMaxHealth = Math.floor(monsterMaxHealth * monsterHealthIncreaseFactor);
         monsterHealth = monsterMaxHealth;
     }
     saveGame();
@@ -83,33 +88,10 @@ function saveGame() {
         gold: gold,
         tapDamage: tapDamage,
         monsterHealth: monsterHealth,
+        monsterMaxHealth: monsterMaxHealth,
         warriors: warriors,
     };
     localStorage.setItem('idleMonsterClickerGameState', JSON.stringify(gameState));
 }
 
-// Load game state from localStorage
-function loadGame() {
-    const savedGameState = localStorage.getItem('idleMonsterClickerGameState');
-    if (savedGameState) {
-        const gameState = JSON.parse(savedGameState);
-        gold = gameState.gold;
-        tapDamage = gameState.tapDamage;
-        monsterHealth = gameState.monsterHealth;
-        for (let i = 0; i < warriors.length; i++) {
-            warriors[i].cost = gameState.warriors[i].cost;
-            warriors[i].baseDamage = gameState.warriors[i].baseDamage;
-            warriors[i].damage = gameState.warriors[i].damage;
-            warriors[i].count = gameState.warriors[i].count;
-        }
-    }
-}
-
-// Call autoBattle every second
-setInterval(autoBattle, 1000);
-
-// Load the game state when the page loads
-window.onload = function() {
-    loadGame();
-    updateUI();
-};
+// Load game state
