@@ -1,132 +1,108 @@
-// game.js
-let gold = 0;
-let tapDamage = 1;
-let monsterHealth = 100;
-let monsterMaxHealth = 100;
-const monsterHealthIncreaseFactor = 1.2; // Increase monster health by 20% after each defeat
-const warriors = [
-    { cost: 0, baseDamage: 5, damage: 5, count: 0 },
-    { cost: 50, baseDamage: 10, damage: 10, count: 0 },
-    { cost: 100, baseDamage: 20, damage: 20, count: 0 },
-    { cost: 200, baseDamage: 40, damage: 40, count: 0 },
-    { cost: 400, baseDamage: 80, damage: 80, count: 0 },
-    { cost: 800, baseDamage: 160, damage: 160, count: 0 },
-    { cost: 1600, baseDamage: 320, damage: 320, count: 0 },
-    { cost: 3200, baseDamage: 640, damage: 640, count: 0 },
-    { cost: 6400, baseDamage: 1280, damage: 1280, count: 0 },
-];
-
-document.getElementById('monster').addEventListener('click', () => {
-    monsterHealth -= tapDamage;
-    showTapDamage(tapDamage);
-
-    if (monsterHealth <= 0) {
-        gold += 10;
-        monsterMaxHealth = Math.floor(monsterMaxHealth * monsterHealthIncreaseFactor);
-        monsterHealth = monsterMaxHealth;
-    }
-
-    saveGame();
-    updateUI();
-});
-
-function showTapDamage(damage) {
-    const tapDamageText = document.getElementById('tap-damage-text');
-    tapDamageText.textContent = `-${damage}`;
-    tapDamageText.style.display = 'block';
-    setTimeout(() => tapDamageText.style.display = 'none', 500);
+/* styles.css */
+body {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    background-color: #282c34;
+    color: white;
+    margin: 0;
+    padding: 0;
 }
 
-function updateUI() {
-    document.getElementById('gold').textContent = gold;
-    document.getElementById('tap-damage').textContent = tapDamage;
-    const healthBarInner = document.getElementById('health-bar-inner');
-    healthBarInner.style.width = `${(monsterHealth / monsterMaxHealth) * 100}%`;
-
-    document.getElementById('monster-health').textContent = `${monsterHealth} / ${monsterMaxHealth}`;
-
-    for (let i = 0; i < warriors.length; i++) {
-        const warriorButton = document.getElementById(`hire-warrior-${i + 1}`);
-        warriorButton.textContent = `Hire Warrior ${i + 1} (${warriors[i].cost} Gold) - ${warriors[i].count} Hired`;
-        warriorButton.disabled = gold < warriors[i].cost;
-    }
+.game-container {
+    width: 90%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #1e2125;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
 
-for (let i = 0; i < warriors.length; i++) {
-    document.getElementById(`hire-warrior-${i + 1}`).addEventListener('click', () => hireWarrior(i));
+.monster {
+    position: relative;
+    margin-top: 50px;
 }
 
-function hireWarrior(index) {
-    const warrior = warriors[index];
-    if (gold >= warrior.cost) {
-        gold -= warrior.cost;
-        warrior.count++;
-        warrior.damage += warrior.baseDamage;
-        tapDamage += warrior.baseDamage;
-        warrior.cost = Math.floor(warrior.cost * 1.15); // Increase cost by 15% for next purchase
-        saveGame();
-        updateUI();
-    }
+#monster {
+    width: 200px;
+    cursor: pointer;
+    transition: transform 0.1s;
 }
 
-// Function to simulate warriors automatically battling monsters
-function autoBattle() {
-    let totalDamage = warriors.reduce((sum, w) => sum + w.damage * w.count, 0);
-    monsterHealth -= totalDamage;
-    if (monsterHealth <= 0) {
-        gold += 10;
-        monsterMaxHealth = Math.floor(monsterMaxHealth * monsterHealthIncreaseFactor);
-        monsterHealth = monsterMaxHealth;
-    }
-    saveGame();
-    updateUI();
+#monster:active {
+    transform: scale(0.95);
 }
 
-// Save game state to localStorage
-function saveGame() {
-    const gameState = {
-        gold: gold,
-        tapDamage: tapDamage,
-        monsterHealth: monsterHealth,
-        monsterMaxHealth: monsterMaxHealth,
-        warriors: warriors,
-    };
-    localStorage.setItem('idleMonsterClickerGameState', JSON.stringify(gameState));
+#tap-damage-text {
+    position: absolute;
+    top: -30px; /* Position the text above the monster */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    color: #ff5252;
+    display: none;
+    animation: fadeOut 0.5s forwards;
+    pointer-events: none; /* Prevent the text from blocking clicks */
 }
 
-// Load game state from localStorage
-function loadGame() {
-    const savedGameState = localStorage.getItem('idleMonsterClickerGameState');
-    if (savedGameState) {
-        const gameState = JSON.parse(savedGameState);
-        gold = gameState.gold;
-        tapDamage = gameState.tapDamage;
-        monsterHealth = gameState.monsterHealth;
-        monsterMaxHealth = gameState.monsterMaxHealth;
-        for (let i = 0; i < warriors.length; i++) {
-            warriors[i].cost = gameState.warriors[i].cost;
-            warriors[i].baseDamage = gameState.warriors[i].baseDamage;
-            warriors[i].damage = gameState.warriors[i].damage;
-            warriors[i].count = gameState.warriors[i].count;
-        }
-    }
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; top: -60px; } /* Animate the text moving up */
 }
 
-// Function to disable pinch-to-zoom
-function disablePinchToZoom() {
-    document.addEventListener('touchmove', function(event) {
-        if (event.scale !== 1) {
-            event.preventDefault();
-        }
-    }, { passive: false });
+.health-bar {
+    width: 100%;
+    height: 30px;
+    background-color: #555;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 20px 0;
+    position: relative;
+    color: white; /* Ensure the text color is white */
 }
 
-// Call autoBattle every second
-setInterval(autoBattle, 1000);
+#monster-health {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    line-height: 30px; /* Center the text vertically */
+    font-size: 18px;
+    color: white;
+    z-index: 1; /* Ensure the text is above the health bar */
+}
 
-// Load the game state and disable pinch-to-zoom when the page loads
-window.onload = function() {
-    loadGame();
-    updateUI();
-    disablePinchToZoom();
-};
+#health-bar-inner {
+    width: 100%;
+    height: 100%;
+    background-color: #4caf50;
+    transition: width 0.2s;
+}
+
+.info {
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+.warriors button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 15px;
+    font-size: 18px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.warriors button:hover {
+    background-color: #0056b3;
+}
+
+.warriors button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
