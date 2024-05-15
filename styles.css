@@ -1,0 +1,93 @@
+/* styles.css */
+body {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    background-color: #282c34;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+.game-container {
+    width: 90%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #1e2125;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.monster {
+    position: relative;
+}
+
+#monster {
+    width: 200px;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+#monster:active {
+    transform: scale(0.95);
+}
+
+#tap-damage-text {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    color: #ff5252;
+    display: none;
+    animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.health-bar {
+    width: 100%;
+    height: 30px;
+    background-color: #555;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+#health-bar-inner {
+    width: 100%;
+    height: 100%;
+    background-color: #4caf50;
+    transition: width 0.2s;
+}
+
+.info {
+    margin: 20px 0;
+    font-size: 18px;
+}
+
+.warriors button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 15px;
+    font-size: 18px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.warriors button:hover {
+    background-color: #0056b3;
+}
+
+.warriors button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
