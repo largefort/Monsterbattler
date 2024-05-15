@@ -1,3 +1,4 @@
+
 // game.js
 let gold = 0;
 let tapDamage = 1;
@@ -112,11 +113,21 @@ function loadGame() {
     }
 }
 
+// Function to disable pinch-to-zoom
+function disablePinchToZoom() {
+    document.addEventListener('touchmove', function(event) {
+        if (event.scale !== 1) {
+            event.preventDefault();
+        }
+    }, { passive: false });
+}
+
 // Call autoBattle every second
 setInterval(autoBattle, 1000);
 
-// Load the game state when the page loads
+// Load the game state and disable pinch-to-zoom when the page loads
 window.onload = function() {
     loadGame();
     updateUI();
+    disablePinchToZoom();
 };
