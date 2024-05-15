@@ -57,6 +57,16 @@ body {
     border-radius: 15px;
     overflow: hidden;
     margin: 20px 0;
+    position: relative;
+}
+
+#monster-health {
+    position: absolute;
+    top: -30px; /* Position the text above the health bar */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
+    color: #fff;
 }
 
 #health-bar-inner {
