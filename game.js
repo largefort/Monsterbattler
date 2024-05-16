@@ -26,6 +26,7 @@ let warriorDamage = 0;
 let monsterHealth = 100;
 let monsterMaxHealth = 100;
 const monsterHealthIncreaseFactor = 1.2; // Increase monster health by 20% after each defeat
+const warriorDamageIncreaseFactor = 1.1; // Increase warrior base damage by 10% after each monster kill
 const warriors = [
     { cost: 0, baseDamage: 500, damage: 500, count: 0 },  // Buffed
     { cost: 50, baseDamage: 1000, damage: 1000, count: 0 },  // Buffed
@@ -46,6 +47,7 @@ document.getElementById('monster').addEventListener('click', () => {
         gold += 10;
         monsterMaxHealth = Math.floor(monsterMaxHealth * monsterHealthIncreaseFactor);
         monsterHealth = monsterMaxHealth;
+        increaseWarriorBaseDamage();  // Increase warrior base damage after each monster kill
     }
 
     saveGame();
@@ -108,12 +110,21 @@ function autoBattle() {
         gold += 10;
         monsterMaxHealth = Math.floor(monsterMaxHealth * monsterHealthIncreaseFactor);
         monsterHealth = monsterMaxHealth;
+        increaseWarriorBaseDamage();  // Increase warrior base damage after each monster kill
     }
     if (totalDamage > 0) {
         showWarriorDamage(totalDamage);
     }
     saveGame();
     updateUI();
+}
+
+// Function to increase base damage of all warriors
+function increaseWarriorBaseDamage() {
+    for (let i = 0; i < warriors.length; i++) {
+        warriors[i].baseDamage = Math.floor(warriors[i].baseDamage * warriorDamageIncreaseFactor);
+        warriors[i].damage = warriors[i].baseDamage * warriors[i].count;
+    }
 }
 
 // Save game state to localStorage
