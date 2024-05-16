@@ -27,15 +27,15 @@ let monsterHealth = 100;
 let monsterMaxHealth = 100;
 const monsterHealthIncreaseFactor = 1.2; // Increase monster health by 20% after each defeat
 const warriors = [
-    { cost: 0, baseDamage: 5, damage: 5, count: 0 },
-    { cost: 50, baseDamage: 10, damage: 10, count: 0 },
-    { cost: 100, baseDamage: 20, damage: 20, count: 0 },
-    { cost: 200, baseDamage: 40, damage: 40, count: 0 },
-    { cost: 400, baseDamage: 80, damage: 80, count: 0 },
-    { cost: 800, baseDamage: 160, damage: 160, count: 0 },
-    { cost: 1600, baseDamage: 320, damage: 320, count: 0 },
-    { cost: 3200, baseDamage: 640, damage: 640, count: 0 },
-    { cost: 6400, baseDamage: 1280, damage: 1280, count: 0 },
+    { cost: 0, baseDamage: 500, damage: 500, count: 0 },  // Buffed
+    { cost: 50, baseDamage: 1000, damage: 1000, count: 0 },  // Buffed
+    { cost: 100, baseDamage: 2000, damage: 2000, count: 0 },  // Buffed
+    { cost: 200, baseDamage: 4000, damage: 4000, count: 0 },  // Buffed
+    { cost: 400, baseDamage: 8000, damage: 8000, count: 0 },  // Buffed
+    { cost: 800, baseDamage: 16000, damage: 16000, count: 0 },  // Buffed
+    { cost: 1600, baseDamage: 32000, damage: 32000, count: 0 },  // Buffed
+    { cost: 3200, baseDamage: 64000, damage: 64000, count: 0 },  // Buffed
+    { cost: 6400, baseDamage: 128000, damage: 128000, count: 0 },  // Buffed
 ];
 
 document.getElementById('monster').addEventListener('click', () => {
