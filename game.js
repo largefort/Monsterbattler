@@ -148,11 +148,26 @@ function loadGame() {
     }
 }
 
-// Function to disable pinch-to-zoom
+// Function to disable pinch-to-zoom but enable scrolling
 function disablePinchToZoom() {
+    document.addEventListener('wheel', function(event) {
+        if (event.ctrlKey) {
+            event.preventDefault();
+        }
+    }, { passive: false });
+
     document.addEventListener('touchmove', function(event) {
         if (event.scale !== 1) {
             event.preventDefault();
+        }
+    }, { passive: false });
+}
+
+// Function to enable scrolling
+function enableScrolling() {
+    document.addEventListener('touchmove', function(event) {
+        if (event.scale === 1) {
+            event.stopPropagation();
         }
     }, { passive: false });
 }
@@ -165,4 +180,5 @@ window.onload = function() {
     loadGame();
     updateUI();
     disablePinchToZoom();
+    enableScrolling();
 };
